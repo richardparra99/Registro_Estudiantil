@@ -1,23 +1,14 @@
 class Estudiante:
-    def __init__(self, id_estudiante, nombreCompleto, fechaNacimiento, carrera):
+    def __init__(self, id_estudiante, nombre, apellido, fecha_nacimiento, carrera):
         self.id_estudiante = id_estudiante
-        self.nombreCompleto = nombreCompleto
-        self.fechaNacimiento = fechaNacimiento
+        self.nombre = nombre
+        self.apellido = apellido
+        self.fecha_nacimiento = fecha_nacimiento
         self.carrera = carrera
         self.materias = {}
-
+        self.notas = {}
+        
     def inscribir_materia(self, materia, notas):
-        self.materias[materia.id_materia] = notas
-
-    def ver_materias_inscritas(self):
-        return list(self.materias.keys())
-
-    def ver_nota(self, materia):
-        return self.materias.get(materia, "Materia no encontrada")
-
-    def calcular_promedio(self, materia):
-        nota = self.materias.get(materia)
-        if nota:
-            return nota
-        else:
-            return "No hay nota registrada para esta materia"
+        self.materias[materia.id_materia] = materia
+        self.notas[materia.id_materia] = notas
+        

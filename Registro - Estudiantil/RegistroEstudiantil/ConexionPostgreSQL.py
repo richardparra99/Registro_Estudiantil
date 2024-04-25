@@ -1,22 +1,41 @@
 import psycopg2
 
 class ConexionPostgreSQL:
-    def __init__(self, parametros):
-        self.parametros = parametros
-        self.conexion = None
-
-    def conectar(self):
+    def __init__(self):
+        self.conn = psycopg2.connect(
+            dbname="Escuelita",
+            user="postgres",
+            password="root",
+            host="localhost",
+            port="5432"
+        )
+        self.cur = self.conn.cursor()
+        
+    def ejecutar_query(self, query, values=None):
         try:
-            self.conexion = psycopg2.connect(**self.parametros)
-            print("Conexión establecida con PostgreSQL")
+            if values:
+                self.cur.execute(query, values)
+            else:
+                self.cur.execute(query)
+            self.conn.commit()
+            print("Consulta ejecutada exitosamente.")
         except psycopg2.Error as e:
-            print("Error al conectar a PostgreSQL:", e)
-
-    def desconectar(self):
-        if self.conexion:
-            self.conexion.close()
-            print("Conexión cerrada con PostgreSQL")
+            print("Error al ejecutar la consulta:", e)
             
-    def ejecutar(self, consulta, valores=None):
-        self.consulta = consulta
-        self.valores = valores
+    def consultar_datos(self, query, values=None):
+        try:
+            if values:
+                self.cur.execute(query, values)
+            else:
+                self.cur.execute(query)
+            rows = self.cur.fetchall()
+            return rows
+        except psycopg2.Error as e:
+            print("Error al consultar los datos:", e)
+            return None
+        
+    def cerrar_conexion(self):
+        self.cur.close()
+        self.conn.close()
+
+
